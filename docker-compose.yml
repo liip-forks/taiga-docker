@@ -32,6 +32,10 @@ x-openid-environment-front: &openid-environment-front
   OPENID_SCOPE: "${OPENID_SCOPE:-openid email}"
   OPENID_FILTER_FIELD: "${OPENID_FILTER_FIELD}"
   OPENID_FILTER: "${OPENID_FILTER}"
+  OPENID_ID_FIELD: "${OPENID_ID_FIELD:-sub}"
+  OPENID_USERNAME_FIELD: "${OPENID_USERNAME_FIELD:-preferred_username}"
+  OPENID_FULLNAME_FIELD: "${OPENID_FULLNAME_FIELD:-name}"
+  OPENID_EMAIL_FIELD: "${OPENID_EMAIL_FIELD:-email}"
 
 x-openid-environment-back: &openid-environment-back
   <<: *openid-environment-front
