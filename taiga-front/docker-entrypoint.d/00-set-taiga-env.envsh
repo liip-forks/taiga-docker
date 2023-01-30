@@ -21,17 +21,15 @@ get_js_bool() {
 
 export TAIGA_URL="${TAIGA_SITES_SCHEME}://${TAIGA_SITES_DOMAIN}"
 
-if [ -z "${TAIGA_SUBPATH}" ]; then
-  export TAIGA_SUBPATH="/"
-fi
-
-if [ "`echo -n $TAIGA_SUBPATH | head -c1`" != "/" ]; then
-  # No starting /, make sure we have one
-  export TAIGA_SUBPATH="/${TAIGA_SUBPATH}"
-fi
-if [ "`echo -n $TAIGA_SUBPATH | tail -c1`" != "/" ]; then
-  # No trailing /, make sure we have one
-  export TAIGA_SUBPATH="/${TAIGA_SUBPATH}/"
+if [ -n "${TAIGA_SUBPATH}" ]; then
+  if [ "`echo -n $TAIGA_SUBPATH | head -c1`" != "/" ]; then
+    # No starting /, make sure we have one
+    export TAIGA_SUBPATH="/${TAIGA_SUBPATH}"
+  fi
+  if [ "`echo -n $TAIGA_SUBPATH | tail -c1`" != "/" ]; then
+    # No trailing /, make sure we have one
+    export TAIGA_SUBPATH="${TAIGA_SUBPATH}/"
+  fi
 fi
 
 TAIGA_WEBSOCKETS_PROTOCOL=ws
