@@ -1,0 +1,45 @@
+#!/bin/sh
+
+set -e
+
+# Make sure environment is set correctly
+
+convert_to_lowercase() {
+  echo -n "$1" | tr '[:upper:]' '[:lower:]'
+}
+get_js_bool() {
+  _b=`convert_to_lowercase "$1"`
+  if [ "$_b" = "true" ]; then
+    echo -n "true"
+  elif [ "$_b" = "false" ]; then
+    echo -n "false"
+  else
+    2>&1 echo "Could not convert '$1' to boolean"
+    echo -n "$1"
+  fi
+}
+
+export TAIGA_URL="${TAIGA_SITES_SCHEME}://${TAIGA_SITES_DOMAIN}"
+
+if [ -z "${TAIGA_SUBPATH}" ]; then
+  export TAIGA_SUBPATH="/"
+fi
+
+if [ "`echo -n $TAIGA_SUBPATH | head -c1`" != "/" ]; then
+  # No starting /, make sure we have one
+  export TAIGA_SUBPATH="/${TAIGA_SUBPATH}"
+fi
+if [ "`echo -n $TAIGA_SUBPATH | tail -c1`" != "/" ]; then
+  # No trailing /, make sure we have one
+  export TAIGA_SUBPATH="/${TAIGA_SUBPATH}/"
+fi
+
+TAIGA_WEBSOCKETS_PROTOCOL=ws
+if [ "${TAIGA_SITES_SCHEME}" = "https" ]; then
+  TAIGA_WEBSOCKETS_PROTOCOL=wss
+fi
+
+export TAIGA_WEBSOCKETS_URL="${TAIGA_WEBSOCKETS_PROTOCOL}://${TAIGA_SITES_DOMAIN}"
+
+# Public register enable/disable needs to be JS boolean (capitalized True or False)
+export PUBLIC_REGISTER_ENABLED=`get_js_bool $PUBLIC_REGISTER_ENABLED`
