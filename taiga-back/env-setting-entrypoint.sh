@@ -52,6 +52,7 @@ force_python_bool ENABLE_TELEMETRY
 force_python_bool PUBLIC_REGISTER_ENABLED
 force_python_bool EMAIL_USE_TLS
 force_python_bool EMAIL_USE_SSL
+force_python_bool ENABLE_OPENID
 
 # If arguments start with manage.py, launch this first
 if [ "`echo -n $@ | head -c11`" = "./manage.py" ]; then

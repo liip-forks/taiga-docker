@@ -47,3 +47,4 @@ export TAIGA_WEBSOCKETS_URL="${TAIGA_WEBSOCKETS_PROTOCOL}://${TAIGA_SITES_DOMAIN
 
 # Public register enable/disable needs to be JS boolean (capitalized True or False)
 force_js_bool PUBLIC_REGISTER_ENABLED
+force_js_bool ENABLE_OPENID

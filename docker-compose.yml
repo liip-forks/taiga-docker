@@ -24,10 +24,23 @@ x-rabbitmq-server-environment:
   RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASS:-taiga}"
   RABBITMQ_DEFAULT_VHOST: "taiga"
 
+x-openid-environment-front: &openid-environment-front
+  ENABLE_OPENID: "${ENABLE_OPENID:-False}"
+  OPENID_NAME: "${OPENID_NAME}"
+  OPENID_CLIENT_ID: "${OPENID_CLIENT_ID}"
+  OPENID_URL: "https://${OPENID_KEYCLOAK_HOSTNAME}/auth/realms/${OPENID_KEYCLOAK_REALM}/protocol/openid-connect/auth"
+
+x-openid-environment-back: &openid-environment-back
+  <<: *openid-environment-front
+  OPENID_USER_URL: "https://${OPENID_KEYCLOAK_HOSTNAME}/auth/realms/${OPENID_KEYCLOAK_REALM}/protocol/openid-connect/userinfo"
+  OPENID_TOKEN_URL: "https://${OPENID_KEYCLOAK_HOSTNAME}/auth/realms/${OPENID_KEYCLOAK_REALM}/protocol/openid-connect/token"
+  OPENID_CLIENT_SECRET: ${OPENID_CLIENT_SECRET}"
+
 x-back-environment: &back-environment
   <<: *db-environment
   <<: *rabbitmq-back-environment
   <<: *taiga-environment
+  <<: *openid-environment-back
   # Check https://github.com/taigaio/taiga-back/blob/master/docker/config.py
   POSTGRES_HOST: taiga-db
   TAIGA_SECRET_KEY: "${TAIGA_SECRET_KEY}"
@@ -44,6 +57,7 @@ x-back-environment: &back-environment
 
 x-front-environment: &front-environment
   <<: *taiga-environment
+  <<: *openid-environment-front
 
 x-protected-environment: &protected-environment
   <<: *taiga-environment # for TAIGA_SUBPATH
