@@ -66,7 +66,7 @@ services:
       - taiga
 
   taiga-back:
-    image: taigaio/taiga-back:latest
+    image: ${TAIGA_IMAGE_BACK:-taigaio/taiga-back:latest}
     environment:
       <<: *back-environment
     volumes: *default-back-volumes
@@ -79,7 +79,7 @@ services:
       - taiga-async-rabbitmq
 
   taiga-async:
-    image: taigaio/taiga-back:latest
+    image: ${TAIGA_IMAGE_BACK:-taigaio/taiga-back:latest}
     entrypoint: ["/taiga-back/docker/async_entrypoint.sh"]
     environment:
       <<: *back-environment
@@ -101,7 +101,7 @@ services:
       - taiga
 
   taiga-front:
-    image: taigaio/taiga-front:latest
+    image: ${TAIGA_IMAGE_FRONT:-taigaio/taiga-front:latest}
     environment:
       <<: *front-environment
     networks:
