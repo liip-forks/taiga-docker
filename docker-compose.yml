@@ -29,6 +29,9 @@ x-openid-environment-front: &openid-environment-front
   OPENID_NAME: "${OPENID_NAME}"
   OPENID_CLIENT_ID: "${OPENID_CLIENT_ID}"
   OPENID_URL: "https://${OPENID_KEYCLOAK_HOSTNAME}/auth/realms/${OPENID_KEYCLOAK_REALM}/protocol/openid-connect/auth"
+  OPENID_SCOPE: "${OPENID_SCOPE:-openid email}"
+  OPENID_FILTER_FIELD: "${OPENID_FILTER_FIELD}"
+  OPENID_FILTER: "${OPENID_FILTER}"
 
 x-openid-environment-back: &openid-environment-back
   <<: *openid-environment-front
