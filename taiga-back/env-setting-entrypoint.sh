@@ -5,7 +5,7 @@ set -e
 # Make sure environment is set correctly
 
 convert_to_lowercase() {
-  echo -n "$1" | tr '[:upper:]' '[:lower:]'
+  echo -n "$1" | tr '[:upper:]' '[:lower:]' | tr -d '\"'
 }
 get_python_bool() {
   _b=`convert_to_lowercase "$1"`
@@ -17,6 +17,12 @@ get_python_bool() {
     2>&1 echo "Could not convert '$1' to boolean"
     echo -n "$1"
   fi
+}
+force_python_bool() {
+  _varname=$1
+  _varvalue=`eval "echo \\$${_varname}"`
+
+  export $_varname=`get_python_bool $_varvalue`
 }
 
 if [ -z "${TAIGA_SUBPATH}" ]; then
@@ -41,10 +47,10 @@ fi
 export EVENTS_PUSH_BACKEND_URL="amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@taiga-events-rabbitmq:5672/taiga"
 export CELERY_BROKER_URL="amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@taiga-async-rabbitmq:5672/taiga"
 
-# Telemetry enable/disable needs to be Python boolean (capitalized True or False)
-export ENABLE_TELEMETRY=`get_python_bool $ENABLE_TELEMETRY`
-
-# Public register enable/disable needs to be Python boolean (capitalized True or False)
-export PUBLIC_REGISTER_ENABLED=`get_python_bool $PUBLIC_REGISTER_ENABLED`
+# Many variables need to be python booleans (capitalized True or False)
+force_python_bool ENABLE_TELEMETRY
+force_python_bool PUBLIC_REGISTER_ENABLED
+force_python_bool EMAIL_USE_TLS
+force_python_bool EMAIL_USE_SSL
 
 eval /taiga-back/docker/entrypoint.sh $@

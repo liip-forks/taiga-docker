@@ -5,7 +5,7 @@ set -e
 # Make sure environment is set correctly
 
 convert_to_lowercase() {
-  echo -n "$1" | tr '[:upper:]' '[:lower:]'
+  echo -n "$1" | tr '[:upper:]' '[:lower:]' | tr -d '\"'
 }
 get_js_bool() {
   _b=`convert_to_lowercase "$1"`
@@ -17,6 +17,12 @@ get_js_bool() {
     2>&1 echo "Could not convert '$1' to boolean"
     echo -n "$1"
   fi
+}
+force_js_bool() {
+  _varname=$1
+  _varvalue=`eval "echo \\$${_varname}"`
+
+  export $_varname=`get_js_bool $_varvalue`
 }
 
 export TAIGA_URL="${TAIGA_SITES_SCHEME}://${TAIGA_SITES_DOMAIN}"
@@ -40,4 +46,4 @@ fi
 export TAIGA_WEBSOCKETS_URL="${TAIGA_WEBSOCKETS_PROTOCOL}://${TAIGA_SITES_DOMAIN}"
 
 # Public register enable/disable needs to be JS boolean (capitalized True or False)
-export PUBLIC_REGISTER_ENABLED=`get_js_bool $PUBLIC_REGISTER_ENABLED`
+force_js_bool PUBLIC_REGISTER_ENABLED

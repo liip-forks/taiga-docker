@@ -32,6 +32,15 @@ x-back-environment: &back-environment
   POSTGRES_HOST: taiga-db
   TAIGA_SECRET_KEY: "${TAIGA_SECRET_KEY}"
   ENABLE_TELEMETRY: "${TAIGA_ENABLE_TELEMETRY:-True}"
+  # Email settings. Uncomment following lines and configure your SMTP server
+  EMAIL_BACKEND: "django.core.mail.backends.smtp.EmailBackend"
+  DEFAULT_FROM_EMAIL: "${DEFAULT_FROM_EMAIL:-no-reply@example.com}"
+  EMAIL_USE_TLS: "${EMAIL_USE_TLS:-False}"
+  EMAIL_USE_SSL: "${EMAIL_USE_TLS:-False}"
+  EMAIL_HOST: "${EMAIL_HOST:-smtp.host.example.com}"
+  EMAIL_PORT: ${EMAIL_PORT:-587}
+  EMAIL_HOST_USER: "${EMAIL_HOST_USER}"
+  EMAIL_HOST_PASSWORD: "${EMAIL_HOST_PASSWORD}"
 
 x-front-environment: &front-environment
   <<: *taiga-environment
@@ -39,17 +48,6 @@ x-front-environment: &front-environment
 x-protected-environment: &protected-environment
   <<: *taiga-environment # for TAIGA_SUBPATH
   SECRET_KEY: "${TAIGA_SECRET_KEY}"
-
-x-environment: &default-back-environment
-  # Email settings. Uncomment following lines and configure your SMTP server
-  # EMAIL_BACKEND: "django.core.mail.backends.smtp.EmailBackend"
-  # DEFAULT_FROM_EMAIL: "no-reply@example.com"
-  # EMAIL_USE_TLS: "False"
-  # EMAIL_USE_SSL: "False"
-  # EMAIL_HOST: "smtp.host.example.com"
-  # EMAIL_PORT: 587
-  # EMAIL_HOST_USER: "user"
-  # EMAIL_HOST_PASSWORD: "password"
 
 x-volumes: &default-back-volumes
   - taiga-static-data:/taiga-back/static
