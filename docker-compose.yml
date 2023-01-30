@@ -41,7 +41,7 @@ x-openid-environment-back: &openid-environment-back
   <<: *openid-environment-front
   OPENID_USER_URL: "https://${OPENID_KEYCLOAK_HOSTNAME}/auth/realms/${OPENID_KEYCLOAK_REALM}/protocol/openid-connect/userinfo"
   OPENID_TOKEN_URL: "https://${OPENID_KEYCLOAK_HOSTNAME}/auth/realms/${OPENID_KEYCLOAK_REALM}/protocol/openid-connect/token"
-  OPENID_CLIENT_SECRET: ${OPENID_CLIENT_SECRET}"
+  OPENID_CLIENT_SECRET: "${OPENID_CLIENT_SECRET}"
 
 x-back-environment: &back-environment
   <<: *db-environment
