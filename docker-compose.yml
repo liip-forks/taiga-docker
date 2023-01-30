@@ -6,6 +6,7 @@ x-taiga-environment: &taiga-environment
   TAIGA_SITES_DOMAIN: "${TAIGA_DOMAIN:-localhost:9000}"
   TAIGA_SUBPATH: "${TAIGA_SUBPATH}"
   PUBLIC_REGISTER_ENABLED: "${PUBLIC_REGISTER_ENABLED:-False}"
+  ENABLE_SLACK: "${ENABLE_SLACK:-False}"
 
 x-db-environment: &db-environment # Database settings
   POSTGRES_DB: taiga
