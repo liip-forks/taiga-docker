@@ -37,6 +37,10 @@ if [ "${TAIGA_SITES_SCHEME}" != "https" ]; then
   export CSRF_COOKIE_SECURE="False"
 fi
 
+# RabbitMQ settings
+export EVENTS_PUSH_BACKEND_URL="amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@taiga-events-rabbitmq:5672/taiga"
+export CELERY_BROKER_URL="amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@taiga-async-rabbitmq:5672/taiga"
+
 # Telemetry enable/disable needs to be Python boolean (capitalized True or False)
 export ENABLE_TELEMETRY=`get_python_bool $ENABLE_TELEMETRY`
 

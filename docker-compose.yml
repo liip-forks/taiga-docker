@@ -12,8 +12,21 @@ x-db-environment: &db-environment # Database settings
   POSTGRES_USER: taiga
   POSTGRES_PASSWORD: "${TAIGA_DB_PASSWORD}"
 
+x-rabbitmq-back-environment:
+  &rabbitmq-back-environment # For rabbitMQ "consumers"
+  RABBITMQ_USER: "${RABBITMQ_USER:-taiga}"
+  RABBITMQ_PASS: "${RABBITMQ_PASS:-taiga}"
+
+x-rabbitmq-server-environment:
+  &rabbitmq-server-environment # For rabbitMQ "server"
+  RABBITMQ_ERLANG_COOKIE: "${RABBITMQ_ERLANG_COOKIE}"
+  RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER:-taiga}"
+  RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASS:-taiga}"
+  RABBITMQ_DEFAULT_VHOST: "taiga"
+
 x-back-environment: &back-environment
   <<: *db-environment
+  <<: *rabbitmq-back-environment
   <<: *taiga-environment
   # Check https://github.com/taigaio/taiga-back/blob/master/docker/config.py
   POSTGRES_HOST: taiga-db
@@ -37,10 +50,6 @@ x-environment: &default-back-environment
   # EMAIL_PORT: 587
   # EMAIL_HOST_USER: "user"
   # EMAIL_HOST_PASSWORD: "password"
-  # Rabbitmq settings
-  # Should be the same as in taiga-async-rabbitmq and taiga-events-rabbitmq
-  RABBITMQ_USER: taiga
-  RABBITMQ_PASS: taiga
 
 x-volumes: &default-back-volumes
   - taiga-static-data:/taiga-back/static
@@ -87,10 +96,7 @@ services:
   taiga-async-rabbitmq:
     image: rabbitmq:3.8-management-alpine
     environment:
-      RABBITMQ_ERLANG_COOKIE: secret-erlang-cookie
-      RABBITMQ_DEFAULT_USER: taiga
-      RABBITMQ_DEFAULT_PASS: taiga
-      RABBITMQ_DEFAULT_VHOST: taiga
+      <<: *rabbitmq-server-environment
     volumes:
       - taiga-async-rabbitmq-data:/var/lib/rabbitmq
     networks:
@@ -120,10 +126,7 @@ services:
   taiga-events-rabbitmq:
     image: rabbitmq:3.8-management-alpine
     environment:
-      RABBITMQ_ERLANG_COOKIE: secret-erlang-cookie
-      RABBITMQ_DEFAULT_USER: taiga
-      RABBITMQ_DEFAULT_PASS: taiga
-      RABBITMQ_DEFAULT_VHOST: taiga
+      <<: *rabbitmq-server-environment
     volumes:
       - taiga-events-rabbitmq-data:/var/lib/rabbitmq
     networks:
