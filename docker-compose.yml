@@ -7,6 +7,7 @@ x-taiga-environment: &taiga-environment
   TAIGA_SUBPATH: "${TAIGA_SUBPATH}"
   PUBLIC_REGISTER_ENABLED: "${PUBLIC_REGISTER_ENABLED:-False}"
   ENABLE_SLACK: "${ENABLE_SLACK:-False}"
+  ENABLE_JIRA_IMPORTER: "${ENABLE_JIRA_IMPORTER:-False}"
 
 x-db-environment: &db-environment # Database settings
   POSTGRES_DB: taiga
@@ -62,6 +63,10 @@ x-back-environment: &back-environment
   EMAIL_PORT: ${EMAIL_PORT:-587}
   EMAIL_HOST_USER: "${EMAIL_HOST_USER}"
   EMAIL_HOST_PASSWORD: "${EMAIL_HOST_PASSWORD}"
+  # Plugins
+  JIRA_IMPORTER_CONSUMER_KEY: "${JIRA_IMPORTER_CONSUMER_KEY}"
+  JIRA_IMPORTER_CERT: "${JIRA_IMPORTER_CERT}"
+  JIRA_IMPORTER_PUB_CERT: "${JIRA_IMPORTER_PUB_CERT}"
 
 x-front-environment: &front-environment
   <<: *taiga-environment
