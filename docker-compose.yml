@@ -85,6 +85,7 @@ x-volumes: &default-back-volumes
 services:
   taiga-db:
     image: postgres:12.3
+    restart: always
     environment:
       <<: *db-environment
     volumes:
@@ -94,6 +95,7 @@ services:
 
   taiga-back:
     image: ${TAIGA_IMAGE_BACK:-taigaio/taiga-back:latest}
+    restart: always
     environment:
       <<: *back-environment
     volumes: *default-back-volumes
@@ -107,6 +109,7 @@ services:
 
   taiga-async:
     image: ${TAIGA_IMAGE_BACK:-taigaio/taiga-back:latest}
+    restart: always
     entrypoint: ["/taiga-back/docker/async_entrypoint.sh"]
     environment:
       <<: *back-environment
@@ -120,6 +123,7 @@ services:
 
   taiga-async-rabbitmq:
     image: rabbitmq:3.8-management-alpine
+    restart: always
     environment:
       <<: *rabbitmq-server-environment
     volumes:
@@ -129,6 +133,7 @@ services:
 
   taiga-front:
     image: ${TAIGA_IMAGE_FRONT:-taigaio/taiga-front:latest}
+    restart: always
     environment:
       <<: *front-environment
     networks:
@@ -141,6 +146,7 @@ services:
 
   taiga-events:
     image: taigaio/taiga-events:latest
+    restart: always
     environment:
       <<: *back-environment
     networks:
@@ -150,6 +156,7 @@ services:
 
   taiga-events-rabbitmq:
     image: rabbitmq:3.8-management-alpine
+    restart: always
     environment:
       <<: *rabbitmq-server-environment
     volumes:
@@ -159,6 +166,7 @@ services:
 
   taiga-protected:
     image: taigaio/taiga-protected:latest
+    restart: always
     environment:
       <<: *protected-environment
     networks:
@@ -166,6 +174,7 @@ services:
 
   taiga-gateway:
     image: nginx:1.19-alpine
+    restart: always
     ports:
       - "${TAIGA_GATEWAY_PORT:-9000}:80"
     volumes:
